@@ -1,10 +1,9 @@
 from qiskit import QuantumCircuit
-from qiskit_aer import Aer
-from qiskit.primitives import Sampler
+from qiskit_aer import AerSimulator as QasmSimulator
 import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
-import seaborn as sns
+import seaborn as sns  # type: ignore
 from collections import Counter
 import pandas as pd
 
@@ -13,14 +12,15 @@ class QRNGError(Exception):
 
 class QuantumRandomNumberGenerator:
     def __init__(self):
-        self.sampler = Sampler()
+        self.simulator = QasmSimulator()
 
     def generate_bit(self):
         qc = QuantumCircuit(1, 1)
         qc.h(0)
         qc.measure(0, 0)
-        result = self.sampler.run(qc, shots=1).result()
-        return list(result.quasi_dists[0].keys())[0]
+        result = self.simulator.run(qc, shots=1).result()
+        counts = result.get_counts()
+        return int(list(counts.keys())[0])
 
     def generate_number(self, min_val, max_val):
         return generate_number_safe(min_val, max_val)
@@ -45,9 +45,10 @@ def create_multi_qubit_circuit(num_qubits):
     return qc
 
 def run_multi_qubit_circuit(qc, shots=1):
-    sampler = Sampler()
-    result = sampler.run(qc, shots=shots).result()
-    return result.quasi_dists[0]
+    simulator = QasmSimulator()
+    result = simulator.run(qc, shots=shots).result()
+    counts = result.get_counts()
+    return counts
 
 def binary_to_decimal(bin_str):
     return int(bin_str, 2)
@@ -55,7 +56,9 @@ def binary_to_decimal(bin_str):
 def generate_random_number(num_bits=4):
     qc = create_multi_qubit_circuit(num_bits)
     result = run_multi_qubit_circuit(qc)
-    return list(result.keys())[0]
+    bit_str = list(result.keys())[0]
+    # Convert the binary string to an integer
+    return int(bit_str, 2)
 
 def generate_number_in_range(min_val, max_val):
     num_bits = (max_val - min_val).bit_length()

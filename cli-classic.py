@@ -18,7 +18,8 @@ def demonstrate_predictability():
     print("Second sequence:", sequence2)
     
     print("\nAs you can see, both sequences are identical when using the same seed!")
-    print("This demonstrates that classic random numbers are predictable when you know the seed.")
+    print("This demonstrates that classic random numbers are predictable when you know t" \
+    "he seed.")
 
 def main():
     parser = argparse.ArgumentParser(description='Classic RNG CLI')

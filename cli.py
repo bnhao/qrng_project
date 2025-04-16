@@ -36,25 +36,22 @@ def demonstrate_fair_comparison():
     print("-" * 25)
     print(f"{'Quantum':15} {q_pvalue:10.4f}")
     print(f"{'Classical':15} {c_pvalue:10.4f}")
-    print("\nNote: p-value > 0.05 suggests uniform distribution")
     
     # Demonstrate predictability
     print("\n4. Predictability Test:")
-    print("\nClassical RNG (with seed):")
-    random.seed(42)
+    print("\nClassical RNG (with same seed):")
+    random.seed(70)
     classical_seq1 = [random.randint(min_val, max_val) for _ in range(5)]
-    random.seed(42)
+    random.seed(70)
     classical_seq2 = [random.randint(min_val, max_val) for _ in range(5)]
     print("Sequence 1:", classical_seq1)
     print("Sequence 2:", classical_seq2)
-    print("Are sequences identical?", classical_seq1 == classical_seq2)
     
-    print("\nQuantum RNG (no seed):")
+    print("\nQuantum RNG:")
     quantum_seq1 = [qrng.generate_number(min_val, max_val) for _ in range(5)]
     quantum_seq2 = [qrng.generate_number(min_val, max_val) for _ in range(5)]
     print("Sequence 1:", quantum_seq1)
     print("Sequence 2:", quantum_seq2)
-    print("Are sequences identical?", quantum_seq1 == quantum_seq2)
     
     # Visual analysis
     print("\n5. Visual Analysis:")
